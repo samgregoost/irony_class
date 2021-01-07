@@ -56,20 +56,7 @@ model = AutoModelForSequenceClassification.from_pretrained(model_checkpoint)
 #Configure training params
 metric_name =  "accuracy"
 
-'''
-args = TrainingArguments(
-    "test-glue",
- #   evaluation_strategy = "epoch",
-    learning_rate=2e-5,
-    per_device_train_batch_size=batch_size,
-    per_device_eval_batch_size=batch_size,
-    num_train_epochs=5,
-    weight_decay=0.01,
-  #  load_best_model_at_end=True,
-    metric_for_best_model=metric_name,
-)
 
-'''
 
 args = TrainingArguments(
     output_dir='./results',          # output directory
@@ -82,17 +69,12 @@ args = TrainingArguments(
     logging_steps=10,
 )
 
-#metric computation
-#from datasets import load_metric
-#Configure training params
-#metric = load_metric('glue', 'sst2')
 
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_recall_fscore_support
 
+# metrics definitions
 def compute_metrics(pred):
-   # predictions, labels = eval_pred
-   # predictions = predictions[:, 0]
     labels = pred.label_ids
     preds = pred.predictions.argmax(-1)
     precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average='binary')
@@ -103,32 +85,14 @@ def compute_metrics(pred):
         'precision': precision,
         'recall': recall
     }
-'''
-def compute_metrics(eval_pred):
-    predictions, labels = eval_pred
-    predictions = predictions[:, 0]
-    return metric.compute(predictions=predictions, references=labels)
 
-
-#Define Trainer object
-
+#define trainer
 trainer = Trainer(
-    model,
-    args,
-    train_dataset=train_dataset,
-    eval_dataset=val_dataset,
-    tokenizer=tokenizer,
-    compute_metrics=compute_metrics
-)
-
-'''
-trainer = Trainer(
-    model=model,                         # the instantiated 🤗 Transformers model to be trained
-    args=args,                  # training arguments, defined above
-    train_dataset=train_dataset,         # training dataset
+    model=model,                         
+    args=args,                  
+    train_dataset=train_dataset,      
     eval_dataset=val_dataset,   
     compute_metrics=compute_metrics
-           # evaluation dataset
 )
 
 #train the model
