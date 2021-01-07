@@ -21,7 +21,6 @@ val_texts = [el[2] for el in test_data]
 train_labels = [int(el[1]) for el in train_data]
 val_labels = [int(el[1]) for el in test_data]
 
-
 #Tokenize the sentences
 from transformers import DistilBertTokenizerFast
 tokenizer = DistilBertTokenizerFast.from_pretrained('/flush5/ram095/iccv2021/oracle/model/')
