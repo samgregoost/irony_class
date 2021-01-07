@@ -1,4 +1,4 @@
-model_checkpoint = "/flush5/ram095/iccv2021/oracle/model/"
+model_checkpoint = "/path/to/mode/data"
 batch_size = 16
 
 import csv
